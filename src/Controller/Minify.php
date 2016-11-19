@@ -18,27 +18,25 @@ class Minify extends \Wei\BaseController
             return $res->setContent('Forbidden')->setStatusCode(403);
         }
 
-        /**
+        /*
          * Configuration for "min", the default application built with the Minify
          * library
          *
          * @package Min
          */
 
-
-        /**
+        /*
          * Allow use of the Minify URI Builder app. Only set this to true while you need it.
          */
         $min_enableBuilder = false;
 
-        /**
+        /*
          * If non-empty, the Builder will be protected with HTTP Digest auth.
          * The username is "admin".
          */
         $min_builderPassword = 'admin';
 
-
-        /**
+        /*
          * Set to true to log messages to FirePHP (Firefox Firebug addon).
          * Set to false for no error logging (Minify may be slightly faster).
          * @link http://www.firephp.org/
@@ -48,8 +46,7 @@ class Minify extends \Wei\BaseController
          */
         $min_errorLogger = true;
 
-
-        /**
+        /*
          * To allow debug mode output, you must set this option to true.
          *
          * Once true, you can send the cookie minDebug to request debug mode output. The
@@ -63,15 +60,14 @@ class Minify extends \Wei\BaseController
          */
         $min_allowDebugFlag = false;
 
-
-        /**
+        /*
          * For best performance, specify your temp directory here. Otherwise Minify
          * will have to load extra code to guess. Some examples below:
          */
         //$min_cachePath = 'c:\\WINDOWS\\Temp';
         //$min_cachePath = '/tmp';
         //$min_cachePath = preg_replace('/^\\d+;/', '', session_save_path());
-        /**
+        /*
          * To use APC/Memcache/ZendPlatform for cache storage, require the class and
          * set $min_cachePath to an instance. Example below:
          */
@@ -83,7 +79,7 @@ class Minify extends \Wei\BaseController
             $min_cachePath = new \Minify_Cache_Memcache(wei()->memcache->getObject());
         }
 
-        /**
+        /*
          * Leave an empty string to use PHP's $_SERVER['DOCUMENT_ROOT'].
          *
          * On some servers, this value may be misconfigured or missing. If so, set this
@@ -97,15 +93,13 @@ class Minify extends \Wei\BaseController
         //$min_documentRoot = substr(__FILE__, 0, -15);
         //$min_documentRoot = $_SERVER['SUBDOMAIN_DOCUMENT_ROOT'];
 
-
-        /**
+        /*
          * Cache file locking. Set to false if filesystem is NFS. On at least one
          * NFS system flock-ing attempts stalled PHP for 30 seconds!
          */
         $min_cacheFileLocking = true;
 
-
-        /**
+        /*
          * Combining multiple CSS files can place @import declarations after rules, which
          * is invalid. Minify will attempt to detect when this happens and place a
          * warning comment at the top of the CSS output. To resolve this you can either
@@ -115,8 +109,7 @@ class Minify extends \Wei\BaseController
          */
         $min_serveOptions['bubbleCssImports'] = false;
 
-
-        /**
+        /*
          * Cache-Control: max-age value sent to browser (in seconds). After this period,
          * the browser will send another conditional GET. Use a longer period for lower
          * traffic but you may want to shorten this before making changes if it's crucial
@@ -127,15 +120,13 @@ class Minify extends \Wei\BaseController
          */
         $min_serveOptions['maxAge'] = 1800;
 
-
-        /**
+        /*
          * To use Google's Closure Compiler API to minify Javascript (falling back to JSMin
          * on failure), uncomment the following line:
          */
         //$min_serveOptions['minifiers']['application/x-javascript'] = array('Minify_JS_ClosureCompiler', 'minify');
 
-
-        /**
+        /*
          * If you'd like to restrict the "f" option to files within/below
          * particular directories below DOCUMENT_ROOT, set this here.
          * You will still need to include the directory in the
@@ -145,14 +136,13 @@ class Minify extends \Wei\BaseController
          */
         //$min_serveOptions['minApp']['allowDirs'] = array('//js', '//css');
 
-        /**
+        /*
          * Set to true to disable the "f" GET parameter for specifying files.
          * Only the "g" parameter will be considered.
          */
         $min_serveOptions['minApp']['groupsOnly'] = false;
 
-
-        /**
+        /*
          * By default, Minify will not minify files with names containing .min or -min
          * before the extension. E.g. myFile.min.js will not be processed by JSMin
          *
@@ -161,8 +151,7 @@ class Minify extends \Wei\BaseController
          */
         //$min_serveOptions['minApp']['noMinPattern'] = '@[-\\.]min\\.(?:js|css)$@i';
 
-
-        /**
+        /*
          * If you minify CSS files stored in symlink-ed directories, the URI rewriting
          * algorithm can fail. To prevent this, provide an array of link paths to
          * target paths, where the link paths are within the document root.
@@ -174,10 +163,9 @@ class Minify extends \Wei\BaseController
          * array('//static' => 'D:\\staticStorage')  // Windows
          * </code>
          */
-        $min_symlinks = array();
+        $min_symlinks = [];
 
-
-        /**
+        /*
          * If you upload files from Windows to a non-Windows server, Windows may report
          * incorrect mtimes for the files. This may cause Minify to keep serving stale
          * cache files when source file changes are made too frequently (e.g. more than
@@ -195,8 +183,7 @@ class Minify extends \Wei\BaseController
          */
         $min_uploaderHoursBehind = 0;
 
-
-        /**
+        /*
          * Path to Minify's lib folder. If you happen to move it, change
          * this accordingly.
          */
@@ -219,13 +206,12 @@ class Minify extends \Wei\BaseController
 
         Min::$uploaderHoursBehind = $min_uploaderHoursBehind;
         Min::setCache(
-            isset($min_cachePath) ? $min_cachePath : ''
-            ,$min_cacheFileLocking
+            isset($min_cachePath) ? $min_cachePath : '', $min_cacheFileLocking
         );
 
         if ($min_documentRoot) {
             $_SERVER['DOCUMENT_ROOT'] = $min_documentRoot;
-            Minify::$isDocRootSet = true;
+            self::$isDocRootSet = true;
         }
 
         $min_serveOptions['minifierOptions']['text/css']['symlinks'] = $min_symlinks;
@@ -255,11 +241,10 @@ class Minify extends \Wei\BaseController
         }
         if (isset($_GET['f']) || isset($_GET['g'])) {
             // serve!
-            if (! isset($min_serveController)) {
+            if (!isset($min_serveController)) {
                 $min_serveController = new Minify_Controller_MinApp();
             }
             Min::serve($min_serveController, $min_serveOptions);
-
         }
         //require 'vendor/mrclay/minify/min/index.php';
         $this->app->preventPreviousDispatch();
