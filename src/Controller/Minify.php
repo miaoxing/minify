@@ -12,12 +12,21 @@ use Wei\Response;
 
 class Minify extends \Wei\BaseController
 {
+    /**
+     * @param $req
+     * @param Response $res
+     * @return $this
+     * @throws \Exception
+     *
+     * @SuppressWarnings(PHPMD)
+     */
     public function indexAction($req, Response $res)
     {
         if (!$req['f']) {
             return $res->setContent('Forbidden')->setStatusCode(403);
         }
 
+        //@codingStandardsIgnoreStart
         /*
          * Configuration for "min", the default application built with the Minify
          * library
@@ -221,7 +230,8 @@ class Minify extends \Wei\BaseController
         }
 
         if ($min_allowDebugFlag) {
-            $min_serveOptions['debug'] = Minify_DebugDetector::shouldDebugRequest($_COOKIE, $_GET, $_SERVER['REQUEST_URI']);
+            $min_serveOptions['debug'] = Minify_DebugDetector::shouldDebugRequest($_COOKIE, $_GET,
+                $_SERVER['REQUEST_URI']);
         }
 
         if ($min_errorLogger) {
@@ -246,6 +256,8 @@ class Minify extends \Wei\BaseController
             }
             Min::serve($min_serveController, $min_serveOptions);
         }
+        // @codingStandardsIgnoreEnd
+
         //require 'vendor/mrclay/minify/min/index.php';
         $this->app->preventPreviousDispatch();
     }
