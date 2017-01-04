@@ -32,5 +32,5 @@ build:
     - miaoxing/github-issue-notify:
         token: $GITHUB_ISSUE_TOKEN
         repo: $GITHUB_ISSUE_REPO
-        title: "【$(date +%y-%m-%d)】Build failed: %title%"
+        title: "[$(date +%y-%m-%d)]Build failed: %title%"
         error_file: error.txt
