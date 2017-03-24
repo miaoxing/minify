@@ -143,7 +143,7 @@ class Minify extends \Wei\BaseController
          *
          * // = shortcut for DOCUMENT_ROOT
          */
-        $min_serveOptions['minApp']['allowDirs'] = array('//', '..');
+        $min_serveOptions['minApp']['allowDirs'] = ['//', '..'];
 
         /*
          * Set to true to disable the "f" GET parameter for specifying files.
