@@ -2,7 +2,7 @@
 
 namespace Miaoxing\Minify;
 
-class Plugin extends \miaoxing\plugin\BasePlugin
+class Plugin extends \Miaoxing\Plugin\BasePlugin
 {
     protected $name = '素材合并';
 
